@@ -1,0 +1,34 @@
+import os
+import shutil
+
+def selectiveCopy(folder,extensions,destFolder):
+    folder=os.path.abspath(folder)
+    print(folder)
+    destFolder=os.path.abspath(destFolder)
+    print(destFolder)
+    print('Looking in '+ folder+ ' for files with extensions of ', ','.join(extensions))
+    
+    try:
+        for foldername,subfolders,filenames in os.walk(folder):
+            print("***",foldername, "**", subfolders , "*",filenames)
+            for file in filenames:
+                name, extension = os.path.splitext(file)
+
+                if extension in extensions and file not in destFolder:
+                    fileAbsPath = foldername + os.path.sep + file
+                    print('Copying', fileAbsPath, 'to', destFolder)
+                    shutil.copy(fileAbsPath, destFolder)
+    except shutil.SameFileError:
+        pass
+    
+
+
+print("Current Working Directory " , os.getcwd(), "\t\n")
+extensions=['.ipynb','.docx']
+folder= os.getcwd()
+new_folder = input('Enter new folder name: ')
+os.mkdir(new_folder)
+destFolder = new_folder
+
+if __name__ == "__main__":
+    selectiveCopy(folder, extensions, destFolder)
